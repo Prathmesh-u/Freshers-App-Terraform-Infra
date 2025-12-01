@@ -43,4 +43,29 @@ resource "aws_security_group" "ec2_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = { Name
+  tags = { Name = "ec2-sg" }
+}
+
+# RDS Security Group (public for you)
+resource "aws_security_group" "rds_sg" {
+  name        = "rds-sg"
+  description = "Allow MySQL"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "MySQL access"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]   # public for now (easy)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = { Name = "rds-sg" }
+}
